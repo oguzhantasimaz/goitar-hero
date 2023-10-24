@@ -74,6 +74,8 @@ func main() {
 	gameTime := 0
 	score := 0
 	events := make(chan tcell.Event)
+
+	// Handle event polling
 	go func() {
 		for {
 			ev := s.PollEvent()
@@ -81,6 +83,7 @@ func main() {
 		}
 	}()
 
+	// Handle events
 	go func() {
 		for {
 			ev := <-events
@@ -93,27 +96,27 @@ func main() {
 					os.Exit(0)
 				} else if ev.Rune() == 'a' || ev.Rune() == 'A' {
 					checkNotePress(*ExampleSong, "A", &score)
-					drawNoteLocations(s, []tcell.Style{aNoteStyle, sNoteStyle, jNoteStyle, kNoteStyle, lNoteStyle})
+					//Simulate note press with * character
 					drawText(s, ALocation, 8, 0, 0, aNoteStyle, "*")
 					s.Show()
 				} else if ev.Rune() == 's' || ev.Rune() == 'S' {
 					checkNotePress(*ExampleSong, "S", &score)
-					drawNoteLocations(s, []tcell.Style{aNoteStyle, sNoteStyle, jNoteStyle, kNoteStyle, lNoteStyle})
+					//Simulate note press with * character
 					drawText(s, SLocation, 8, 0, 0, sNoteStyle, "*")
 					s.Show()
 				} else if ev.Rune() == 'j' || ev.Rune() == 'J' {
 					checkNotePress(*ExampleSong, "J", &score)
-					drawNoteLocations(s, []tcell.Style{aNoteStyle, sNoteStyle, jNoteStyle, kNoteStyle, lNoteStyle})
+					//Simulate note press with * character
 					drawText(s, JLocation, 8, 0, 0, jNoteStyle, "*")
 					s.Show()
 				} else if ev.Rune() == 'k' || ev.Rune() == 'K' {
 					checkNotePress(*ExampleSong, "K", &score)
-					drawNoteLocations(s, []tcell.Style{aNoteStyle, sNoteStyle, jNoteStyle, kNoteStyle, lNoteStyle})
+					//Simulate note press with * character
 					drawText(s, KLocation, 8, 0, 0, kNoteStyle, "*")
 					s.Show()
 				} else if ev.Rune() == 'l' || ev.Rune() == 'L' {
 					checkNotePress(*ExampleSong, "L", &score)
-					drawNoteLocations(s, []tcell.Style{aNoteStyle, sNoteStyle, jNoteStyle, kNoteStyle, lNoteStyle})
+					//Simulate note press with * character
 					drawText(s, LLocation, 8, 0, 0, kNoteStyle, "*")
 					s.Show()
 				}
@@ -122,6 +125,7 @@ func main() {
 	}()
 
 	t := time.NewTicker(time.Second / 3)
+	// Main game loop
 	for {
 		gameTime++
 
@@ -150,6 +154,7 @@ func main() {
 
 }
 
+// checkNotePress: Checks if a note was pressed and updates the score
 func checkNotePress(song models.Song, key string, score *int) {
 	for _, n := range song.Notes {
 		if n.Key == key && n.Y == 9 {
@@ -158,6 +163,7 @@ func checkNotePress(song models.Song, key string, score *int) {
 	}
 }
 
+// drawText: Draws text on the screen
 func drawText(s tcell.Screen, x1, y1, x2, y2 int, style tcell.Style, text string) {
 	row := y1
 	col := x1
@@ -174,6 +180,7 @@ func drawText(s tcell.Screen, x1, y1, x2, y2 int, style tcell.Style, text string
 	}
 }
 
+// drawNoteLocations: Draws the note locations on the screen
 func drawNoteLocations(s tcell.Screen, styles []tcell.Style) {
 	drawText(s, ALocation, 8, 0, 0, styles[0], "A")
 	drawText(s, SLocation, 8, 0, 0, styles[1], "S")
