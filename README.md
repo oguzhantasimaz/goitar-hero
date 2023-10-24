@@ -12,18 +12,6 @@ This is a Guitar Hero-inspired game implemented in the terminal using the Go pro
 
 - **Scoring System:** Compete with yourself or friends to achieve the highest score and accuracy.
 
-## Prerequisites
-
-Before you can run this game, make sure you have the following installed:
-
-- Go (Golang): You can download and install Go from the official [Go website](https://golang.org/dl/).
-
-- TCell: This library is required to handle terminal input and rendering. Install it using the following command:
-
-  ```
-  go get github.com/gdamore/tcell
-  ```
-
 ## Installation
 
 1. Clone this repository to your local machine:
