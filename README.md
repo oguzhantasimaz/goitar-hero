@@ -12,6 +12,8 @@ This is a Guitar Hero-inspired game implemented in the terminal using the Go pro
 
 - **Scoring System:** Compete with yourself or friends to achieve the highest score and accuracy.
 
+- **Audio Playback:** Listen to the song as you play along.
+
 ## Installation
 
 1. Clone this repository to your local machine:
@@ -50,7 +52,7 @@ This is a Guitar Hero-inspired game implemented in the terminal using the Go pro
 
 ## Customization
 
-You can customize the game by adding your own songs and changing the note patterns in the code. See `ExampleSong` in main.go
+You can customize the game by adding your own songs and changing the note patterns in the code. See `ScarTissue` in main.go
 
 ## Acknowledgements
 
@@ -65,7 +67,7 @@ Feel free to open Pull Requests
 - [ ] Game over
 - [ ] Song library
 - [ ] Difficulty
-- [ ] Sound 
+- [x] Sound 
 - [ ] Mute music if note is not played correctly
 
 ## License
