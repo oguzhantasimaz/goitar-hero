@@ -2,14 +2,15 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
+	"time"
+
 	"github.com/faiface/beep"
 	"github.com/faiface/beep/mp3"
 	"github.com/faiface/beep/speaker"
 	"github.com/gdamore/tcell"
 	"github.com/oguzhantasimaz/goitar-hero/models"
-	"log"
-	"os"
-	"time"
 )
 
 const (
@@ -103,20 +104,18 @@ func main() {
 
 	gameTime := 0
 	score := 0
-	events := make(chan tcell.Event)
 
-	// Handle event polling
 	go func() {
-		for {
-			ev := s.PollEvent()
-			events <- ev
-		}
+		<-done
+		s.Fini()
+		fmt.Println("Score: ", score)
+		os.Exit(0)
 	}()
 
 	// Handle events
 	go func() {
 		for {
-			ev := <-events
+			ev := s.PollEvent()
 			switch ev := ev.(type) {
 			case *tcell.EventResize:
 				s.Sync()
@@ -124,7 +123,6 @@ func main() {
 				if ev.Key() == tcell.KeyEscape || ev.Key() == tcell.KeyCtrlC {
 					s.Fini()
 					done <- true
-					os.Exit(0)
 				} else if ev.Rune() == 'a' || ev.Rune() == 'A' {
 					checkNotePress(*ScarTissue, gameTime, "A", &score)
 					//Simulate note press with * character
@@ -159,19 +157,16 @@ func main() {
 	songStarted := false
 	// Main game loop
 	for {
-		gameTime++
-
 		if gameTime > 3 && !songStarted {
 			speaker.Play(beep.Seq(streamer, beep.Callback(func() {
 				done <- true
 			})))
+			defer speaker.Close()
 			songStarted = true
 		}
 
 		if gameTime > ScarTissue.Notes[len(ScarTissue.Notes)-1].Time+9 {
-			s.Fini()
 			done <- true
-			os.Exit(score)
 		}
 
 		for _, n := range ScarTissue.Notes {
@@ -183,8 +178,10 @@ func main() {
 
 		drawText(s, 20, 0, 30, 0, aNoteStyle, fmt.Sprintf("Score: %d", score))
 		s.Show()
+
 		select {
 		case <-t.C:
+			gameTime++
 			s.Clear()
 			drawNoteLocations(s, []tcell.Style{aNoteStyle, sNoteStyle, jNoteStyle, kNoteStyle, lNoteStyle})
 			s.Sync()
@@ -199,6 +196,7 @@ func main() {
 func checkNotePress(song models.Song, gameTime int, key string, score *int) {
 	for _, n := range song.Notes {
 		if n.Key == key && n.Y == 9 && gameTime == n.Time+8 {
+			n.Y++
 			*score = *score + 1
 		}
 	}
